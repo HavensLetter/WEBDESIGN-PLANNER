@@ -4,264 +4,103 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Daily Planner</title>
-  <link rel="stylesheet" href="style.css" />
   <style>
     :root {
       --bg: #fffaf2;
       --accent: #e2b07f;
       --text: #4b3b2a;
-      --note-bg: #fff3e6;
-      --task-bg: #fef3dc;
+      --light: #fef3dc;
     }
 
     body {
-      font-family: 'Georgia', serif;
-      background-color: var(--bg);
-      color: var(--text);
       margin: 0;
-      padding: 30px 20px;
-      line-height: 1.6;
+      font-family: 'Georgia', serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      height: 100vh;
     }
 
-    h1, h2 {
-      text-align: center;
-      color: var(--accent);
-      font-weight: normal;
-      margin-bottom: 10px;
+    .sidebar {
+      width: 180px;
+      background-color: var(--light);
+      padding-top: 40px;
+      border-right: 2px solid #ecdcc3;
     }
 
-    nav {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    nav a {
-      margin: 0 12px;
+    .sidebar a {
+      display: block;
+      padding: 14px 20px;
       text-decoration: none;
       color: var(--text);
       font-weight: bold;
-      padding: 6px 12px;
-      border-radius: 20px;
-      transition: background 0.2s;
+      border-left: 4px solid transparent;
     }
 
-    nav a:hover {
-      background: var(--accent);
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: var(--accent);
       color: white;
+      border-left: 4px solid white;
     }
 
-    #task-list, #notes-section {
-      max-width: 600px;
-      margin: 30px auto;
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    .main {
+      flex: 1;
+      padding: 40px;
+      overflow-y: auto;
+    }
+
+    h1 {
+      color: var(--accent);
     }
 
     .task {
-      background: var(--task-bg);
+      background: var(--light);
       padding: 12px 16px;
       margin: 10px 0;
       border-radius: 12px;
       display: flex;
       align-items: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
 
     .task input[type="checkbox"] {
       margin-right: 10px;
       transform: scale(1.2);
     }
-
-    #calendar {
-      max-width: 700px;
-      margin: 30px auto;
-      text-align: center;
-    }
-
-    #calendar h2 {
-      margin-bottom: 10px;
-    }
-
-    #calendar table {
-      width: 100%;
-      border-collapse: collapse;
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    }
-
-    #calendar th, #calendar td {
-      padding: 12px;
-      text-align: center;
-      color: var(--text);
-    }
-
-    #calendar th {
-      background-color: var(--accent);
-      color: white;
-      font-weight: normal;
-    }
-
-    #calendar td {
-      border-bottom: 1px solid #f2e7d5;
-    }
-
-    #calendar td:hover {
-      background-color: #fdf0da;
-      cursor: pointer;
-    }
-
-    button {
-      padding: 8px 14px;
-      margin: 10px 6px;
-      border: none;
-      background-color: var(--accent);
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    button:hover {
-      opacity: 0.9;
-    }
-
-    #notes {
-      width: 100%;
-      min-height: 150px;
-      padding: 14px;
-      background-color: var(--note-bg);
-      border: none;
-      border-radius: 12px;
-      font-family: inherit;
-      font-size: 1rem;
-      resize: vertical;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
-    }
-
-    #notes:focus {
-      outline: 2px solid var(--accent);
-    }
   </style>
 </head>
 <body>
-  <h1>My Daily Planner</h1>
 
-  <!-- 🔗 Navigation -->
-  <nav>
-    <a href="index.html">Home</a>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="daily.html" class="active">Daily</a>
     <a href="weekly.html">Weekly</a>
+    <a href="calendar.html">Calendar</a>
     <a href="notes.html">Notes</a>
-    <a href="https://example.com" target="_blank">Visit Example</a>
-  </nav>
+  </div>
 
-  <!-- ✅ Daily Tasks -->
-  <div id="task-list">
-    <h2>Today's Tasks</h2>
+  <!-- Main Content -->
+  <div class="main">
+    <h1>Daily To-Do List</h1>
     <div class="task"><input type="checkbox" /> Morning Routine</div>
-    <div class="task"><input type="checkbox" /> Work on Project</div>
+    <div class="task"><input type="checkbox" /> Project Work</div>
     <div class="task"><input type="checkbox" /> Check Emails</div>
     <div class="task"><input type="checkbox" /> Exercise</div>
     <div class="task"><input type="checkbox" /> Dinner Prep</div>
   </div>
 
-  <!-- 🗓️ Calendar -->
-  <div id="calendar">
-    <h2 id="month-year">Calendar</h2>
-    <button onclick="changeMonth(-1)">←</button>
-    <button onclick="changeMonth(1)">→</button>
-    <table>
-      <thead>
-        <tr>
-          <th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
-        </tr>
-      </thead>
-      <tbody id="calendar-body">
-        <!-- Calendar days will be injected here -->
-      </tbody>
-    </table>
-  </div>
-
-  <!-- 📝 Notes -->
-  <div id="notes-section">
-    <h2>Notes</h2>
-    <textarea id="notes" placeholder="Write your notes here..."></textarea>
-  </div>
-
   <script>
-    // ✅ TASKS: Save checkbox state
     document.addEventListener("DOMContentLoaded", () => {
-      const checkboxes = document.querySelectorAll('#task-list input[type="checkbox"]');
+      const checkboxes = document.querySelectorAll('.task input[type="checkbox"]');
       checkboxes.forEach((box, index) => {
-        const saved = localStorage.getItem("task_" + index);
+        const saved = localStorage.getItem("daily_task_" + index);
         box.checked = saved === "true";
         box.addEventListener("change", () => {
-          localStorage.setItem("task_" + index, box.checked);
+          localStorage.setItem("daily_task_" + index, box.checked);
         });
       });
-
-      // 📝 NOTES: Save notes in localStorage
-      const notesArea = document.getElementById("notes");
-      notesArea.value = localStorage.getItem("daily_notes") || "";
-      notesArea.addEventListener("input", () => {
-        localStorage.setItem("daily_notes", notesArea.value);
-      });
-
-      // 🗓️ CALENDAR: Init logic
-      generateCalendar(currentMonth, currentYear);
     });
-
-    // 🗓️ CALENDAR LOGIC
-    const calendarBody = document.getElementById("calendar-body");
-    const monthYear = document.getElementById("month-year");
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-    let currentYear = 2025;
-    let currentMonth = 0;
-
-    function generateCalendar(month, year) {
-      calendarBody.innerHTML = "";
-      let firstDay = new Date(year, month).getDay();
-      let daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      monthYear.textContent = `${months[month]} ${year}`;
-      let date = 1;
-      for (let i = 0; i < 6; i++) {
-        let row = document.createElement("tr");
-        for (let j = 0; j < 7; j++) {
-          let cell = document.createElement("td");
-          if (i === 0 && j < firstDay) {
-            cell.textContent = "";
-          } else if (date <= daysInMonth) {
-            cell.textContent = date;
-            date++;
-          } else {
-            cell.textContent = "";
-          }
-          row.appendChild(cell);
-        }
-        calendarBody.appendChild(row);
-      }
-    }
-
-    function changeMonth(direction) {
-      currentMonth += direction;
-      if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
-      } else if (currentMonth < 0) {
-        currentMonth = 11;
-        currentYear--;
-      }
-      if (currentYear < 2025) currentYear = 2025;
-      if (currentYear > 2026) currentYear = 2026;
-      generateCalendar(currentMonth, currentYear);
-    }
   </script>
+
 </body>
 </html>
