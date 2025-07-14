@@ -4,6 +4,48 @@
   <meta charset="UTF-8">
   <title>Daily Planner</title>
   <link rel="stylesheet" href="styles.css">
+  <script defer src="scripts/daily.js"></script>
+  <style>
+    .daily-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .daily-header h1 {
+      color: #6a4e3a;
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .todo-item input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      margin-left: 10px;
+      background: #fffaf2;
+      border: 1px solid #d2bfae;
+      font-family: 'Georgia', serif;
+    }
+
+    button {
+      background-color: #d6b88f;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-family: 'Georgia', serif;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #c6a97e;
+    }
+  </style>
 </head>
 <body>
   <div class="sidebar">
@@ -17,8 +59,13 @@
   </div>
 
   <div class="content">
-    <h1>Daily Planner</h1>
-    <p>Write your goals, to-do list, and priorities for today here.</p>
+    <div class="daily-header">
+      <h1 id="dayTitle">Daily Planner</h1>
+      <input type="date" id="datePicker">
+    </div>
+
+    <div id="todo-list"></div>
+    <button onclick="addTask()">+ Add Task</button>
   </div>
 </body>
 </html>
