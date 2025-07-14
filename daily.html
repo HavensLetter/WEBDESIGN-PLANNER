@@ -1,0 +1,63 @@
+<!-- daily.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Planner</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #fffaf2;
+      color: #4b3b2a;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #b08968;
+    }
+    #task-list {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .task {
+      background: #fef3dc;
+      padding: 10px 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+    }
+    .task input[type="checkbox"] {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>My Daily Planner</h1>
+  <div id="task-list">
+    <div class="task"><input type="checkbox" /> Morning Routine</div>
+    <div class="task"><input type="checkbox" /> Work on Project</div>
+    <div class="task"><input type="checkbox" /> Check Emails</div>
+    <div class="task"><input type="checkbox" /> Exercise</div>
+    <div class="task"><input type="checkbox" /> Dinner Prep</div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const checkboxes = document.querySelectorAll('#task-list input[type="checkbox"]');
+
+      checkboxes.forEach((box, index) => {
+        const saved = localStorage.getItem("task_" + index);
+        box.checked = saved === "true";
+
+        box.addEventListener("change", () => {
+          localStorage.setItem("task_" + index, box.checked);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
