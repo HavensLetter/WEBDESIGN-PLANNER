@@ -2,76 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Monthly Calendar</title>
+  <title>Calendar</title>
   <link rel="stylesheet" href="styles.css">
-  <script defer src="scripts/calendar.js"></script>
-  <style>
-    .calendar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 6px;
-    }
-
-    .day-label {
-      text-align: center;
-      font-weight: bold;
-      background: #f2e5d5;
-      padding: 10px;
-      border-radius: 6px;
-      color: #4b3b2a;
-    }
-
-    .calendar-day {
-      height: 80px;
-      background-color: #fffaf2;
-      border: 1px solid #e2cdbf;
-      border-radius: 6px;
-      padding: 5px;
-      cursor: pointer;
-      font-family: 'Georgia', serif;
-      text-align: right;
-      padding-right: 8px;
-    }
-
-    .calendar-day:hover {
-      background-color: #f5e9d5;
-    }
-
-    .calendar-container {
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.05);
-    }
-
-    h1 {
-      color: #6a4e3a;
-    }
-
-    button {
-      background-color: #d6b88f;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 6px;
-      font-family: 'Georgia', serif;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #c6a97e;
-    }
-  </style>
+  <script defer src="scripts/scripts.js"></script>
 </head>
-  <body class="calendar-page">
-<body>
+<body class="calendar-page">
   <div class="sidebar">
     <h2>🌿 Haven’s Planner</h2>
     <ul>
@@ -83,23 +18,20 @@
   </div>
 
   <div class="content">
-    <div class="calendar-container">
-      <h1>Monthly Calendar</h1>
-      <div class="calendar-header">
-        <button onclick="prevMonth()">«</button>
-        <h2 id="monthYear"></h2>
-        <button onclick="nextMonth()">»</button>
-      </div>
-      <div class="calendar-grid" id="dayLabels">
-        <div class="day-label">Sun</div>
-        <div class="day-label">Mon</div>
-        <div class="day-label">Tue</div>
-        <div class="day-label">Wed</div>
-        <div class="day-label">Thu</div>
-        <div class="day-label">Fri</div>
-        <div class="day-label">Sat</div>
-      </div>
-      <div class="calendar-grid" id="calendarDays"></div>
+    <h1 id="monthYear">Calendar</h1>
+    <div class="navigation">
+      <button onclick="prevMonth()">←</button>
+      <button onclick="nextMonth()">→</button>
+    </div>
+    <div class="calendar-grid">
+      <div class="day-name">Sun</div>
+      <div class="day-name">Mon</div>
+      <div class="day-name">Tue</div>
+      <div class="day-name">Wed</div>
+      <div class="day-name">Thu</div>
+      <div class="day-name">Fri</div>
+      <div class="day-name">Sat</div>
+      <div id="calendarDays"></div>
     </div>
   </div>
 </body>
