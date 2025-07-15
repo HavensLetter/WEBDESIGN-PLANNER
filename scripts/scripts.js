@@ -1,9 +1,9 @@
-// ===================== DAILY =====================
+// ===== DAILY LOGIC =====
 if (document.body.classList.contains('daily-page')) {
-  const params = new URLSearchParams(window.location.search);
   const datePicker = document.getElementById('datePicker');
   const todoList = document.getElementById('todo-list');
   const dayTitle = document.getElementById('dayTitle');
+  const params = new URLSearchParams(window.location.search);
   const today = params.get('date') || new Date().toISOString().split('T')[0];
 
   datePicker.value = today;
@@ -15,7 +15,7 @@ if (document.body.classList.contains('daily-page')) {
 
   dayTitle.textContent = formatDateLabel(today);
 
-  function getStorageKey() {
+  function getKey() {
     return 'daily_' + datePicker.value;
   }
 
@@ -27,12 +27,12 @@ if (document.body.classList.contains('daily-page')) {
         checked: item.querySelector('input[type="checkbox"]').checked
       });
     });
-    localStorage.setItem(getStorageKey(), JSON.stringify(tasks));
+    localStorage.setItem(getKey(), JSON.stringify(tasks));
   }
 
   function loadTasks() {
     todoList.innerHTML = '';
-    const tasks = JSON.parse(localStorage.getItem(getStorageKey()) || '[]');
+    const tasks = JSON.parse(localStorage.getItem(getKey()) || '[]');
     tasks.forEach(task => addTask(task.text, task.checked));
   }
 
@@ -57,74 +57,13 @@ if (document.body.classList.contains('daily-page')) {
   loadTasks();
 }
 
-// ===================== CALENDAR =====================
-if (document.body.classList.contains('calendar-page')) {
-  const calendarDays = document.getElementById("calendarDays");
-  const monthYear = document.getElementById("monthYear");
-
-  let currentMonth = new Date().getMonth();
-  let currentYear = new Date().getFullYear();
-
-  function renderCalendar(month, year) {
-    calendarDays.innerHTML = "";
-
-    const firstDay = new Date(year, month, 1).getDay();
-    const lastDate = new Date(year, month + 1, 0).getDate();
-    const thisMonth = new Date(year, month);
-
-    monthYear.innerText = thisMonth.toLocaleString("default", {
-      month: "long",
-      year: "numeric"
-    });
-
-    for (let i = 0; i < firstDay; i++) {
-      const empty = document.createElement("div");
-      calendarDays.appendChild(empty);
-    }
-
-    for (let day = 1; day <= lastDate; day++) {
-      const box = document.createElement("div");
-      box.className = "calendar-day";
-      box.textContent = day;
-
-      const isoDate = new Date(year, month, day).toISOString().split("T")[0];
-      box.onclick = () => {
-        localStorage.setItem("selectedDate", isoDate);
-        window.location.href = "daily.html?date=" + isoDate;
-      };
-
-      calendarDays.appendChild(box);
-    }
-  }
-
-  window.nextMonth = function () {
-    currentMonth++;
-    if (currentMonth > 11) {
-      currentMonth = 0;
-      currentYear++;
-    }
-    renderCalendar(currentMonth, currentYear);
-  };
-
-  window.prevMonth = function () {
-    currentMonth--;
-    if (currentMonth < 0) {
-      currentMonth = 11;
-      currentYear--;
-    }
-    renderCalendar(currentMonth, currentYear);
-  };
-
-  renderCalendar(currentMonth, currentYear);
-}
-
-// ===================== WEEKLY =====================
+// ===== WEEKLY LOGIC =====
 if (document.body.classList.contains('weekly-page')) {
   const weekGrid = document.getElementById('weekGrid');
   const weekLabel = document.getElementById('weekLabel');
-  let weekStart = getStartOfWeek(new Date());
+  let weekStart = getWeekStart(new Date());
 
-  function getStartOfWeek(date) {
+  function getWeekStart(date) {
     const d = new Date(date);
     const day = d.getDay();
     const diff = d.getDate() - day + (day === 0 ? -6 : 1);
@@ -141,18 +80,17 @@ if (document.body.classList.contains('weekly-page')) {
 
   function renderWeek() {
     weekGrid.innerHTML = '';
-    const dayNames = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+    const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     weekLabel.textContent = 'Week of ' + weekStart.toLocaleDateString();
-
     const saved = JSON.parse(localStorage.getItem(getWeekKey()) || '{}');
 
     for (let i = 0; i < 7; i++) {
-      const dayDate = new Date(weekStart);
-      dayDate.setDate(dayDate.getDate() + i);
-      const id = formatDate(dayDate);
+      const d = new Date(weekStart);
+      d.setDate(d.getDate() + i);
+      const id = formatDate(d);
       const day = document.createElement('div');
       day.className = 'day';
-      day.innerHTML = '<h2>' + dayNames[i] + '</h2><textarea id="' + id + '">' + (saved[id] || '') + '</textarea>';
+      day.innerHTML = `<h2>${dayNames[i]}</h2><textarea id="${id}">${saved[id] || ''}</textarea>`;
       weekGrid.appendChild(day);
     }
 
@@ -180,38 +118,97 @@ if (document.body.classList.contains('weekly-page')) {
   renderWeek();
 }
 
-// ===================== NOTES =====================
+// ===== NOTES LOGIC =====
 if (document.body.classList.contains('notes-page')) {
-  let notePage = 1;
+  let page = 1;
   const noteArea = document.getElementById('noteArea');
   const noteLabel = document.getElementById('noteLabel');
 
   function getNoteKey() {
-    return 'note_page_' + notePage;
-  }
-
-  function loadNote() {
-    noteLabel.textContent = 'Page ' + notePage;
-    noteArea.value = localStorage.getItem(getNoteKey()) || '';
+    return 'note_' + page;
   }
 
   function saveNote() {
     localStorage.setItem(getNoteKey(), noteArea.value);
   }
 
-  noteArea.addEventListener('input', saveNote);
+  function loadNote() {
+    noteLabel.textContent = 'Page ' + page;
+    noteArea.value = localStorage.getItem(getNoteKey()) || '';
+  }
 
   window.nextNote = function () {
     saveNote();
-    notePage++;
+    page++;
     loadNote();
   };
 
   window.prevNote = function () {
-    saveNote();
-    if (notePage > 1) notePage--;
-    loadNote();
+    if (page > 1) {
+      saveNote();
+      page--;
+      loadNote();
+    }
   };
 
+  noteArea.addEventListener('input', saveNote);
   loadNote();
+}
+
+// ===== CALENDAR LOGIC =====
+if (document.body.classList.contains('calendar-page')) {
+  const calendarDays = document.getElementById("calendarDays");
+  const monthYear = document.getElementById("monthYear");
+  let currentMonth = new Date().getMonth();
+  let currentYear = new Date().getFullYear();
+
+  function renderCalendar(month, year) {
+    calendarDays.innerHTML = "";
+    const firstDay = new Date(year, month, 1).getDay();
+    const lastDate = new Date(year, month + 1, 0).getDate();
+
+    monthYear.textContent = new Date(year, month).toLocaleString("default", {
+      month: "long",
+      year: "numeric"
+    });
+
+    for (let i = 0; i < firstDay; i++) {
+      const blank = document.createElement("div");
+      calendarDays.appendChild(blank);
+    }
+
+    for (let day = 1; day <= lastDate; day++) {
+      const cell = document.createElement("div");
+      cell.className = "calendar-day";
+      cell.textContent = day;
+
+      const isoDate = new Date(year, month, day).toISOString().split("T")[0];
+      cell.onclick = () => {
+        localStorage.setItem("selectedDate", isoDate);
+        window.location.href = "daily.html?date=" + isoDate;
+      };
+
+      calendarDays.appendChild(cell);
+    }
+  }
+
+  window.nextMonth = function () {
+    currentMonth++;
+    if (currentMonth > 11) {
+      currentMonth = 0;
+      currentYear++;
+    }
+    renderCalendar(currentMonth, currentYear);
+  };
+
+  window.prevMonth = function () {
+    currentMonth--;
+    if (currentMonth < 0) {
+      currentMonth = 11;
+      currentYear--;
+    }
+    renderCalendar(currentMonth, currentYear);
+  };
+
+  renderCalendar(currentMonth, currentYear);
 }
