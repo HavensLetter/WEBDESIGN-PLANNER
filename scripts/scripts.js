@@ -219,22 +219,30 @@ function loadStickers() {
   const canvas = document.getElementById('stickerCanvas');
   if (!canvas) return;
 
-  const saved = JSON.parse(localStorage.getItem('stickers') || '[]');
-  saved.forEach(sticker => {
-    createSticker(sticker.emoji, sticker.x, sticker.y);
-  });
+  try {
+    const saved = JSON.parse(localStorage.getItem('stickers') || '[]');
+    saved.forEach(sticker => {
+      createSticker(sticker.emoji, sticker.x, sticker.y);
+    });
+  } catch (e) {
+    console.warn("⚠️ Could not load stickers:", e);
+  }
 }
 
 function saveStickers() {
-  const stickers = [];
-  document.querySelectorAll('.sticker').forEach(stick => {
-    stickers.push({
-      emoji: stick.textContent,
-      x: stick.style.left,
-      y: stick.style.top
+  try {
+    const stickers = [];
+    document.querySelectorAll('.sticker').forEach(stick => {
+      stickers.push({
+        emoji: stick.textContent,
+        x: stick.style.left,
+        y: stick.style.top
+      });
     });
-  });
-  localStorage.setItem('stickers', JSON.stringify(stickers));
+    localStorage.setItem('stickers', JSON.stringify(stickers));
+  } catch (e) {
+    console.warn("⚠️ Could not save stickers:", e);
+  }
 }
 
 function createSticker(emoji, left = '10px', top = '10px') {
@@ -244,6 +252,11 @@ function createSticker(emoji, left = '10px', top = '10px') {
   el.textContent = emoji;
   el.style.left = left;
   el.style.top = top;
+
+  // Accessibility
+  el.setAttribute('tabindex', '0');
+  el.setAttribute('aria-label', `Sticker: ${emoji}`);
+  el.setAttribute('role', 'img');
 
   el.onmousedown = function (e) {
     const shiftX = e.clientX - el.getBoundingClientRect().left;
