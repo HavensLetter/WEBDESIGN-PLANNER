@@ -215,3 +215,65 @@ if (document.body.classList.contains('notes-page')) {
 
   loadNote();
 }
+function loadStickers() {
+  const canvas = document.getElementById('stickerCanvas');
+  if (!canvas) return;
+
+  const saved = JSON.parse(localStorage.getItem('stickers') || '[]');
+  saved.forEach(sticker => {
+    createSticker(sticker.emoji, sticker.x, sticker.y);
+  });
+}
+
+function saveStickers() {
+  const stickers = [];
+  document.querySelectorAll('.sticker').forEach(stick => {
+    stickers.push({
+      emoji: stick.textContent,
+      x: stick.style.left,
+      y: stick.style.top
+    });
+  });
+  localStorage.setItem('stickers', JSON.stringify(stickers));
+}
+
+function createSticker(emoji, left = '10px', top = '10px') {
+  const canvas = document.getElementById('stickerCanvas');
+  const el = document.createElement('div');
+  el.className = 'sticker';
+  el.textContent = emoji;
+  el.style.left = left;
+  el.style.top = top;
+
+  el.onmousedown = function (e) {
+    const shiftX = e.clientX - el.getBoundingClientRect().left;
+    const shiftY = e.clientY - el.getBoundingClientRect().top;
+
+    function moveAt(pageX, pageY) {
+      el.style.left = pageX - shiftX + 'px';
+      el.style.top = pageY - shiftY + 'px';
+    }
+
+    function onMouseMove(e) {
+      moveAt(e.pageX, e.pageY);
+    }
+
+    document.addEventListener('mousemove', onMouseMove);
+
+    el.onmouseup = function () {
+      document.removeEventListener('mousemove', onMouseMove);
+      el.onmouseup = null;
+      saveStickers();
+    };
+  };
+
+  el.ondragstart = () => false;
+  canvas.appendChild(el);
+  saveStickers();
+}
+
+window.addSticker = function (emoji) {
+  createSticker(emoji);
+};
+
+document.addEventListener('DOMContentLoaded', loadStickers);
