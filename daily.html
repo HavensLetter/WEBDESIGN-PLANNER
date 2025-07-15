@@ -47,14 +47,9 @@
     }
   </style>
 </head>
-<body class="daily-page"><div class="sticker-panel">
-  <button onclick="addSticker('⭐')">⭐</button>
-  <button onclick="addSticker('🌸')">🌸</button>
-  <button onclick="addSticker('📌')">📌</button>
-</div>
-<div id="stickerCanvas"></div>
-  <body>
+<body class="daily-page">
   <div class="sidebar">
+    <div id="stickerCanvas"></div>
     <h2>🌿 Haven’s Planner</h2>
     <ul>
       <li><a href="daily.html">Daily</a></li>
@@ -69,9 +64,14 @@
       <h1 id="dayTitle">Daily Planner</h1>
       <input type="date" id="datePicker">
     </div>
-
     <div id="todo-list"></div>
     <button onclick="addTask()">+ Add Task</button>
+  </div>
+
+  <div class="sticker-panel">
+    <button onclick="addSticker('⭐')">⭐</button>
+    <button onclick="addSticker('🌸')">🌸</button>
+    <button onclick="addSticker('📌')">📌</button>
   </div>
 </body>
 </html>
